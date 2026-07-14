@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  google-searcher:
+    build: .
+    container_name: google-searcher
+    ports:
+      - "8000:8000"
+    environment:
+      - API_KEYS=${API_KEYS:-your-secret-key}
+      - WEBHOOK_SECRET=${WEBHOOK_SECRET:-}
+      - RESULT_TTL_SECONDS=${RESULT_TTL_SECONDS:-3600}
+      - MAX_RESULTS=${MAX_RESULTS:-10}
+      - PLAYWRIGHT_DEFAULT_PROXY=${PLAYWRIGHT_DEFAULT_PROXY:-}
+      - HOST=0.0.0.0
+      - PORT=8000
+    volumes:
+      - ./app.py:/app/app.py
+      - ./main.py:/app/main.py
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import httpx; httpx.get('http://localhost:8000/docs', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
