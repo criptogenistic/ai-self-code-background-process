@@ -1,1 +1,2 @@
 make sure to vibecode a separate window as a background app function this utility works best a second layer in that window
+the utility needs access to the code function to rewrite itself (vibecode window)
